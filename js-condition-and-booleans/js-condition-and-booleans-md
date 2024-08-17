@@ -90,10 +90,11 @@ const isSunShining = true;
 if (isSunShining) {
   // Code, der nur ausgeführt wird, wenn die Bedingung "isSunShining" true ist
 }
+```
+
 Der else-Block wird nur ausgeführt, wenn die Bedingung false ist.
 
-js
-Code kopieren
+```js
 const isSunShining = false;
 
 if (isSunShining) {
