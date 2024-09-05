@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>react-component-testing.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="react-komponententests">React Komponententests</h1>
+<h2 id="lernziele">Lernziele</h2>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Verständnis der Idee von Komponententests</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Wissen, wie man</label>
+<ul>
+<li>eine React-Komponente in Tests rendert</li>
+<li>Interaktionen mit einer gerenderten React-Komponente in Tests simuliert</li>
+<li>nach erwarteten Elementen in der gerenderten React-Komponente sucht</li>
+<li>erwartete Ergebnisse formuliert</li>
+</ul>
+</li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Ein allgemeines Verständnis für Mocks haben</label></li>
+</ul>
+<hr>
+<h2 id="warum-es-sinnvoll-ist-frontend-zu-testen">Warum es sinnvoll ist, Frontend zu testen</h2>
+<p>Beim Entwickeln von Apps müssen wir sie regelmäßig testen, um sicherzustellen, dass alles wie erwartet funktioniert und um Bugs zu finden, bevor es die Benutzer tun.</p>
+<p>Manuelles Testen der App über die Benutzeroberfläche ist zeitaufwendig und unzuverlässig. Das Rendern eines Teils der Benutzeroberfläche und das Simulieren von Interaktionen kann in Komponententests automatisiert werden.</p>
+<p>Dieser Ansatz versucht, mit der App auf die gleiche Weise zu interagieren wie ein echter Benutzer, indem er in der gerenderten App nach bestimmten Elementen sucht:</p>
+<ul>
+<li>Suche nach einer Überschrift mit bestimmtem Inhalt</li>
+<li>Suche nach Eingabefeldern mit bestimmten Labels und Einfügen von Text</li>
+<li>Suche nach einem Button mit einem bestimmten Label und Klicken zum Absenden eines Formulars</li>
+<li>Suche nach einem erwarteten Ergebnis, das nach dem Absenden angezeigt werden sollte</li>
+</ul>
+<p>Wir können solche Tests für jede React-Komponente in unserem Code schreiben.</p>
+<p>In einer früheren Sitzung haben wir uns Unit-Tests angesehen, die sich auf eine einzelne Funktion oder Einheit konzentrieren. Komponententests fallen in die Kategorie der Integrationstests, da sie testen, wie verschiedene einzelne Funktionen zusammenarbeiten, um ein Ergebnis auf den Bildschirmen der Benutzer zu erzeugen.</p>
+<p>Anstatt die gesamte App oder eine vollständige Seite zu testen (dies wäre End-to-End-Testing), erstellen wir getrennte kleinere Tests für einzelne Komponenten.</p>
+<p>Wir platzieren die Datei, die die Tests enthält, direkt neben der Komponentendatei mit der Endung <code>.test.js</code>.</p>
+<pre class="hljs"><code><div>MyComponent
+├── MyComponent.styled.js
+├── MyComponent.test.js
+└── index.js
+</div></code></pre>
+<hr>
+<h2 id="testing-library">Testing Library</h2>
+<p>Die <a href="https://testing-library.com/docs/react-testing-library/intro">Testing Library</a> ermöglicht es uns, React-Komponenten in Jest-Tests zu rendern, Benutzerverhalten zu simulieren und die Ergebnisse nach dem erneuten Rendern der Komponente zu überprüfen.</p>
+<h3 id="beispiel">Beispiel</h3>
+<h5 id="fahrenheitconverterjs">FahrenheitConverter.js</h5>
+<p>Die Komponente <code>FahrenheitConverter</code> rendert eine Überschrift, ein Formular und ein Ergebnisausgabe. Wenn das Formular noch nicht abgeschickt wurde, wird eine alternative Nachricht anstelle des Ergebnisses angezeigt. Nachdem das Formular abgeschickt wurde, wird die Berechnung durchgeführt und das Ergebnis im State gespeichert. Dies löst ein erneutes Rendern der Komponente aus, sodass das Ergebnis angezeigt wird.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { useState } <span class="hljs-keyword">from</span> <span class="hljs-string">"react"</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">FahrenheitConverter</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> [fahrenheit, setFahrenheit] = useState();
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span>(<span class="hljs-params">event</span>) </span>{
+    event.preventDefault();
+
+    <span class="hljs-keyword">const</span> form = event.target;
+    <span class="hljs-keyword">const</span> formElements = form.elements;
+    <span class="hljs-keyword">const</span> celsius = formElements.celsius.value;
+
+    setFahrenheit((celsius * <span class="hljs-number">9</span>) / <span class="hljs-number">5</span> + <span class="hljs-number">32</span>);
+  }
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Temperature Unit Converter<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">onSubmit</span>=<span class="hljs-string">{handleSubmit}</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">htmlFor</span>=<span class="hljs-string">"celsius"</span>&gt;</span>°C<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"number"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"celsius"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"celsius"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">button</span>&gt;</span>Convert to Fahrenheit<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span>
+      {fahrenheit ? (
+        <span class="hljs-tag">&lt;<span class="hljs-name">output</span>&gt;</span>{fahrenheit} °F<span class="hljs-tag">&lt;/<span class="hljs-name">output</span>&gt;</span>
+      ) : (
+        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Please enter a Celsius value and submit<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+      )}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  );
+}
+</div></code></pre>
+<h5 id="fahrenheitconvertertestjs">FahrenheitConverter.test.js</h5>
+<p>Es gibt drei Tests für diese Komponente:</p>
+<ol>
+<li>Test, dass die Überschrift angezeigt wird</li>
+<li>Test, dass die alternative Nachricht angezeigt wird, bevor das Formular abgeschickt wurde</li>
+<li>Test, dass die Formularinteraktion und das Abschicken funktionieren, das Ergebnis korrekt berechnet und anstelle der alternativen Nachricht angezeigt wird.</li>
+</ol>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> { render, screen } <span class="hljs-keyword">from</span> <span class="hljs-string">"@testing-library/react"</span>;
+<span class="hljs-keyword">import</span> userEvent <span class="hljs-keyword">from</span> <span class="hljs-string">"@testing-library/user-event"</span>;
+<span class="hljs-keyword">import</span> FahrenheitConverter <span class="hljs-keyword">from</span> <span class="hljs-string">"."</span>;
+
+test(<span class="hljs-string">"renders a heading"</span>, () =&gt; {
+  render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">TemperatureUnitConverter</span> /&gt;</span></span>);
+  <span class="hljs-keyword">const</span> heading = screen.getByRole(<span class="hljs-string">"heading"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-regexp">/temperature unit converter/i</span>,
+  });
+  expect(heading).toBeInTheDocument();
+});
+
+test(<span class="hljs-string">"renders a fallback message if form is not yet submitted"</span>, () =&gt; {
+  render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">FahrenheitConverter</span> /&gt;</span></span>);
+  <span class="hljs-keyword">const</span> message = screen.getByText(<span class="hljs-regexp">/please enter a celsius value and submit/i</span>);
+  expect(message).toBeInTheDocument();
+});
+
+test(<span class="hljs-string">"converts Celsius to Fahrenheit and renders the result"</span>, <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> user = userEvent.setup();
+
+  render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">FahrenheitConverter</span> /&gt;</span></span>);
+
+  <span class="hljs-keyword">const</span> input = screen.getByLabelText(<span class="hljs-regexp">/°C/i</span>);
+  expect(input).toBeInTheDocument();
+
+  <span class="hljs-keyword">const</span> button = screen.getByRole(<span class="hljs-string">"button"</span>, { <span class="hljs-attr">name</span>: <span class="hljs-regexp">/convert to fahrenheit/i</span> });
+  expect(button).toBeInTheDocument();
+
+  <span class="hljs-keyword">await</span> user.type(input, <span class="hljs-string">"5"</span>);
+  <span class="hljs-keyword">await</span> user.click(button);
+
+  <span class="hljs-keyword">const</span> output = screen.getByText(<span class="hljs-regexp">/41 °F/i</span>);
+  expect(output).toBeInTheDocument();
+
+  <span class="hljs-keyword">const</span> message = screen.queryByText(
+    <span class="hljs-regexp">/please enter a celsius value and submit/i</span>
+  );
+  expect(message).not.toBeInTheDocument();
+});
+</div></code></pre>
+<h3 id="komponente-rendern">Komponente rendern</h3>
+<p>Mit der <a href="https://testing-library.com/docs/react-testing-library/api#render"><code>render</code></a> Methode kannst du die <code>FahrenheitConverter</code> Komponente initial rendern. Danach kannst du die Methode <a href="https://testing-library.com/docs/queries/about/#screen"><code>screen</code></a> verwenden, um auf das von der Komponente generierte HTML zuzugreifen.</p>
+<h3 id="verwendung-von-queries">Verwendung von Queries</h3>
+<p>Mit <a href="https://testing-library.com/docs/queries/about/#screen"><code>screen</code></a> kannst du Queries verwenden, um nach bestimmten Elementen zu suchen, die du im generierten HTML erwartest.</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://testing-library.com/docs/queries/byrole"><code>ByRole</code></a></td>
+<td>Search for an element based on their <code>role</code> / <code>aria-*</code> attribute (for example <code>button</code>, <code>textbox</code>, <code>heading</code>)</td>
+</tr>
+<tr>
+<td><a href="https://testing-library.com/docs/queries/bylabeltext"><code>ByLabelText</code></a></td>
+<td>Search for an element (like an input field) with a given label</td>
+</tr>
+<tr>
+<td><a href="%60https://testing-library.com/docs/queries/bytext%60"><code>ByText</code></a></td>
+<td>Search for a given text</td>
+</tr>
+<tr>
+<td><a href="https://testing-library.com/docs/queries/bytestid"><code>ByTestId</code></a></td>
+<td>Last resort to search for an element you can't address with other queries. Mark the element with the attribute <code>data-testid</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>In den meisten Fällen solltest du Queries mit <code>getBy</code> verwenden, um sofort zu scheitern, wenn das Element nicht gefunden wird. Manchmal möchtest du testen, ob etwas nicht angezeigt wird. Verwende in diesem Fall <code>queryBy</code>, da es den Test nicht sofort scheitern lässt, sondern <code>null</code> zurückgibt.</p>
+<p>Du kannst einen String verwenden, um einen zu suchenden Text zu definieren, wie zum Beispiel: <code>getByText(&quot;Text hier&quot;)</code>.</p>
+<p>Du kannst den Text auch in Schrägstriche setzen, gefolgt von einem <code>i</code>, <em>anstatt von</em> Anführungszeichen für einen String, wie <code>getByText(/text hier/i)</code>.</p>
+<p>Dies macht deine Tests widerstandsfähiger gegenüber Änderungen in der Implementierung: <code>getByText(&quot;Text hier&quot;)</code> würde beginnen zu scheitern, wenn sich die Groß-/Kleinschreibung in der Komponente ändern würde. Deshalb ist dies eine sehr übliche Konvention beim Schreiben von Tests. Auch wenn <code>/text hier/i</code> auf den ersten Blick seltsam aussieht, wirst du dich schnell daran gewöhnen.</p>
+<p>Der Ausdruck, der in Schrägstriche eingeschlossen ist (<code>/hello world/</code>), wird als <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">regular expression</a> bezeichnet. Der <code>i</code>-Modifikator am Ende sagt dem regulären Ausdruck, dass Unterschiede zwischen Groß- und Kleinschreibung ignoriert werden sollen. Reguläre Ausdrücke werden häufig verwendet, um Dinge in großen Strings zu suchen und sind sehr mächtig. Du musst sie jedoch nicht tiefer verstehen, als hier gezeigt, um deine Tests zu schreiben.</p>
+<p>Die Verwendung des <a href="https://testing-playground.com/">Testing Playground</a> hilft dir beim Schreiben von Queries.</p>
+<h3 id="benutzerereignisse-simulieren">Benutzerereignisse simulieren</h3>
+<p>Du kannst <a href="https://testing-library.com/docs/user-event/intro">simulieren, wie Benutzer interagieren</a> mit der Komponente. Zuerst musst du einen virtuellen Benutzer mit <code>userEvent.setup()</code> einrichten. Dann kannst du Ereignisse wie <code>type</code> oder <code>click</code> simulieren. Vergiss nicht, <code>await</code> mit Benutzereignissen zu verwenden.</p>
+<h3 id="verwendung-von-matchern">Verwendung von Matchern</h3>
+<p>Mit <a href="https://jestjs.io/docs/expect"><code>expect</code></a> kannst du <a href="https://jestjs.io/docs/using-matchers">Matcher</a> verwenden, um ein erwartetes Ergebnis deines Tests zu formulieren: Es ist dasselbe Konzept wie beim Unit-Testing.</p>
+<p>Da wir in Komponententests HTML generieren, kannst du einige <a href="https://github.com/testing-library/jest-dom#custom-matchers">zusätzliche Matcher</a> verwenden, wie <code>toBeInTheDocument</code> oder <code>toBeVisible</code>.</p>
+<hr>
+<h2 id="mocks">Mocks</h2>
+<p><a href="https://jestjs.io/docs/mock-functions">Ein Mock</a> ist ein Ersatz, der in Tests anstelle einer ursprünglichen Funktion verwendet wird. Häufige Anwendungsfälle sind:</p>
+<ul>
+<li>Event-Handler-Funktionen, die als Prop an eine Komponente übergeben werden</li>
+<li>Das Ersetzen eines importierten Pakets</li>
+</ul>
+<p>Mocks werden verwendet, um Abhängigkeiten in einem Test zu reduzieren und eine testbare Umgebung für eine Komponente bereitzustellen.</p>
+<h3 id="mock-funktion-f%C3%BCr-event-handler">Mock-Funktion für Event-Handler</h3>
+<p>Betrachten wir eine <code>Counter</code> Komponente, die zwei Event-Handler-Funktionen als Prop akzeptiert:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Counter</span>(<span class="hljs-params">{ onDecrease, onIncrease }</span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onDecrease}</span>&gt;</span>
+        decrease
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"button"</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{onIncrease}</span>&gt;</span>
+        increase
+      <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span></span>
+  );
+}
+</div></code></pre>
+<p>In einem Test möchtest du möglicherweise testen, ob die übergebenen Event-Handler-Funktionen aufgerufen werden, wenn die Buttons geklickt werden. Da du in diesem Test keine vollständige App renderst, sondern nur diese Komponente, kannst du eine Mock-Funktion übergeben.</p>
+<p>Mock-Funktionen können mit <code>jest.fn()</code> erstellt werden. Dies gibt dir eine Funktion, die du mit <code>expect</code> verwenden kannst.</p>
+<pre class="hljs"><code><div>test(<span class="hljs-string">"should call event-handler functions"</span>, <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-comment">// Erstellt Mock-Funktionen</span>
+  <span class="hljs-keyword">const</span> handleDecrease = jest.fn();
+  <span class="hljs-keyword">const</span> handleIncrease = jest.fn();
+
+  <span class="hljs-keyword">const</span> user = userEvent.setup();
+
+  render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Counter</span> <span class="hljs-attr">onDecrease</span>=<span class="hljs-string">{handleDecrease}</span> <span class="hljs-attr">onIncrease</span>=<span class="hljs-string">{handleIncrease}</span> /&gt;</span></span>);
+
+  <span class="hljs-keyword">const</span> decreaseButton = screen.getByRole(<span class="hljs-string">"button"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-regexp">/decrease/i</span>,
+  });
+  <span class="hljs-keyword">const</span> increaseButton = screen.getByRole(<span class="hljs-string">"button"</span>, {
+    <span class="hljs-attr">name</span>: <span class="hljs-regexp">/increase/i</span>,
+  });
+
+  <span class="hljs-keyword">await</span> user.click(increaseButton);
+  <span class="hljs-keyword">await</span> user.click(decreaseButton);
+  <span class="hljs-keyword">await</span> user.click(increaseButton);
+
+  expect(handleDecrease).toHaveBeenCalledTimes(<span class="hljs-number">1</span>);
+  expect(handleIncrease).toHaveBeenCalledTimes(<span class="hljs-number">2</span>);
+});
+</div></code></pre>
+<h3 id="testing-nextjs-userouter-mock">Testing Next.js (<code>useRouter</code> Mock)</h3>
+<p>Beim Schreiben von Tests für Komponenten, die den <code>useRouter</code> Hook von Next.js verwenden, musst du auf einige Stolpersteine achten. Wenn Tests ausgeführt werden, laufen sie nicht in einem echten Browser. Daher gibt es keine <a href="https://developer.mozilla.org/en-US/docs/Web/API/Location">Browser Location API</a>, und der Kontext, den Next.js verwendet, um Routing-Informationen an alle Komponenten in der App bereitzustellen, ist nicht vorhanden.</p>
+<p>Der <code>useRouter</code> Hook erfordert die Browser Location API, um zu funktionieren, daher wird er einen Fehler auslösen und die Tests werden fehlschlagen.</p>
+<p>Um Komponenten zu testen, die den <code>useRouter</code> Hook verwenden, musst du einen Mock schreiben.</p>
+<p>Ein Mock ist ein Ersatz, der in Tests anstelle der ursprünglichen Funktion verwendet wird. Du kannst den <code>useRouter</code> Hook von <code>next/router</code> durch einen Mock ersetzen, wie unten beschrieben. Füge die Funktionen/Eigenschaften des Routers hinzu, die die getestete Komponente verwendet. In einem Mock wird die einfachste mögliche Implementierung verwendet, die die Tests zum Laufen bringt. Im folgenden Beispiel nehmen wir an, dass die getesteten Komponenten auf <code>router.asPath</code> zugreifen und <code>router.push</code> aufrufen.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> MyComponent <span class="hljs-keyword">from</span> <span class="hljs-string">"."</span>;
+<span class="hljs-comment">/* ... wahrscheinlich weitere Importe hier ... */</span>
+
+jest.mock(<span class="hljs-string">"next/router"</span>, () =&gt; ({
+  useRouter() {
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">push</span>: jest.fn(),
+      <span class="hljs-attr">asPath</span>: <span class="hljs-string">"/"</span>,
+    };
+  },
+}));
+
+test(<span class="hljs-string">"should render"</span>, () =&gt; {
+  <span class="hljs-comment">/* ... Test hier ... */</span>
+});
+
+<span class="hljs-comment">/* ... wahrscheinlich weitere Tests hier ... */</span>
+</div></code></pre>
+<hr>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://testing-library.com/docs/react-testing-library/intro/">Testing Library</a></li>
+<li><a href="https://testing-library.com/docs/react-testing-library/api#render">Testing Library: render</a></li>
+<li><a href="https://testing-library.com/docs/queries/about/#screen">Testing Library: screen</a></li>
+<li><a href="https://testing-library.com/docs/queries/about/">Testing Library: Queries</a></li>
+<li><a href="https://testing-playground.com/">Testing Playground</a></li>
+<li><a href="https://testing-library.com/docs/user-event/intro">Testing Library: UserEvents</a></li>
+<li><a href="https://github.com/testing-library/jest-dom">jest-dom (additional matchers)</a></li>
+<li><a href="https://jestjs.io/docs/mock-functions">Jest: Mock functions</a></li>
+</ul>
+
+</body>
+</html>
