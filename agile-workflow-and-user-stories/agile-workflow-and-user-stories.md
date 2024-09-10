@@ -16,7 +16,7 @@ Das Wort agile kann einen Prozess bei der Produktentwicklung, eine Struktur inne
 
 Es gibt viele verschiedene Methoden, die wir im agilen Management verwenden können. Das Bild zeigt die wichtigsten agilen Methoden und deren Komplexität sowie Implementierung.
 
-![agile](agile&ScrumSlides/assets/agile-methods.png)
+![agile](./assets/agile-methods.png)
 Agile Methoden: Komplexität über Implementierung
 
 - **Single Task**: Eine Person erledigt eine Aufgabe ohne viele Abhängigkeiten zu anderen. Es ist einfach, geradlinig und leicht zu implementieren.
@@ -32,7 +32,7 @@ Agile Methoden: Komplexität über Implementierung
 
 ## SCRUM Überblick
 
-![agile](agile&ScrumSlides/assets/SCRUM.png)
+![agile](./assets/SCRUM.png)
 SCRUM
 
 Das Herzstück der Methode ist der **Sprint**. Es handelt sich um eine feste Zeitspanne, in der das Entwicklerteam konsequent an definierten Aufgaben arbeitet. Jeden Tag gibt es ein **Daily Standup**, bei dem jeder seine Fortschritte teilt. Es gibt weitere Events während der Woche für das Team, wie **Sprint-Planung** (wir planen, was in den nächsten Sprint kommt) und **Sprint-Review** (nach jedem Sprint informieren wir die Stakeholder über die Ergebnisse des Sprints).
@@ -47,12 +47,12 @@ Die **Retrospektive** zeigt auf, was gut lief, was schlecht lief und was wir fü
 
 Da die Agile-Methodik auf der Validierung und Iteration von Produkten basierend auf Nutzerfeedback aufgebaut ist, spielt das MVP eine zentrale Rolle in der agilen Entwicklung.
 
-![MVP](agile&ScrumSlides/assets/MVP1.png)
+![MVP](./assets/MVP1.png)
 
 Das MVP ist ein Instrument zur Risikominimierung im Verlauf der Produktentwicklung.
 Es handelt sich um ein funktionsfähiges Produkt mit minimalen Features, das mit wenig Aufwand erstellt wird, um Kunden- oder Nutzerfeedback zu erhalten.
 
-![MVP](agile&ScrumSlides/assets/MVP2.png)
+![MVP](./assets/MVP2.png)
 
 ## Backlog
 
@@ -62,7 +62,7 @@ Es gibt zwei Backlogs zu berücksichtigen: den Product Backlog und den Sprint Ba
 
 **Sprint Backlog**: Der Sprint Backlog definiert alle User Stories für den nächsten Sprint. Die User Stories sind detailliert und abgeschlossen, priorisiert und festgelegt. Sobald der Sprint begonnen hat, ist der Sprint Backlog geschützt und das Entwicklerteam konzentriert sich auf diese Aufgaben.
 
-![MVP](agile&ScrumSlides/assets/backlog.png)
+![MVP](./assets/backlog.png)
 
 ## User Stories
 
